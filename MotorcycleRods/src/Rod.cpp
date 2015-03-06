@@ -1,6 +1,7 @@
 #include "inc/Rod.hpp"
 #include "inc/function.hpp"
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
 using namespace std;
@@ -34,11 +35,21 @@ float Rods::getAngle(){
 	}
 }
 
+float Rods::getAngleFromMoments(){
+	if(contours.size()!=0){
+		Moments m=moments(contours,false);
+		float angle=(-(atan((2*m.mu11)/(m.mu02-m.mu20))*180/PI)/2);
+		return angle;
+	} else {
+		return -1;
+	}
+}
+
 string Rods::getDescription(){
 	stringstream ss;
 	ss<<"- Type: "<<((type()==1)?"A":"B")<<endl;
 	ss<<"- Baricenter: ("<<baricenter.x<<","<<baricenter.y<<")"<<endl;
-	ss<<"- Orientation: "<<getAngle()<<endl;
+	ss<<"- Orientation: "<<getAngleFromMoments()<<endl;
 	float width=(enclosingRectangle.size.height<enclosingRectangle.size.width)?enclosingRectangle.size.height:enclosingRectangle.size.width;
 	float length=(enclosingRectangle.size.height>enclosingRectangle.size.width)?enclosingRectangle.size.height:enclosingRectangle.size.width;
 	ss<<"- Width: "<<width<<endl;

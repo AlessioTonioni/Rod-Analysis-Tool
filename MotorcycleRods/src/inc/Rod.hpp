@@ -20,10 +20,12 @@ public:
 	float widthBaricenter=-1;
 	RotatedRect enclosingRectangle;
 	vector<Hole> holes;
+	vector<Point> contours;
 	bool approximated;
 	int type(); //1 type A one holes, 2 type B two holes
 	float widthAtBaricenter(Mat*labeledImage, Point* rightCorner, Point* leftCorner);
 	float getAngle();
+	float getAngleFromMoments();
 	string getDescription();
 	void applyTranslation(int x, int y);
 	bool operator==(const Rods& r);

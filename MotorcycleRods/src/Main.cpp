@@ -115,14 +115,16 @@ int main( int argc, char** argv )
 			}
 
 
-			//find the boundingBox for this specific rod
+			//find the boundingBox and the contours for this specific rod
 			size_t index;
 			for( index=0; index<boundingBoxes.size(); index++){
 				Point boxCenter(boundingBoxes[index].center.x,boundingBoxes[index].center.y);
 				if(getDistance(rod.baricenter,boxCenter ,EUCLIDIAN)<THRESHOLD_DISTANCE)
 					break;
 			}
+			rod.contours=contours[index];
 			rod.enclosingRectangle=boundingBoxes[index];
+
 
 			//check whatever the bounding box is rectangular or not, if it's not skip this labeled item
 			if(abs(rod.enclosingRectangle.size.width-rod.enclosingRectangle.size.height)<THRESHOLD_RECTANGULAR)

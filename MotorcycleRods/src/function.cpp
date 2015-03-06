@@ -179,6 +179,7 @@ vector<Rods> detachRods(Mat image, vector<Hole> holes, Rect ROI, bool isFast){
 			{
 				//compute final rod
 				if(h[k][3]==-1){
+					result[i].contours=c[k];
 					result[i].enclosingRectangle=boundingBoxes[k];
 					result[i].applyTranslation(ROI.x,ROI.y);
 					result[i].ROI=ROI;
@@ -207,13 +208,9 @@ Mat detachBlob(Mat image){
 
 	// Threshold to obtain the foreground objects
 	threshold(dist, dist, .5, 1., CV_THRESH_BINARY);
-	imshow("test",dist);
-	waitKey(0);
 
 	//dilate to make rods bigger
 	dilate(dist,dist,kernel);
-	imshow("dilatata",dist);
-	waitKey(0);
 
 	return dist;
 }
