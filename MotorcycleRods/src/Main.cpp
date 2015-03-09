@@ -97,6 +97,10 @@ int main( int argc, char** argv )
 
 			//check if the blob is composed of more than one rod
 			if(rod.area>THRESHOLD_AREA){
+				cout<<"Touching blobs finded select 1-Faster analysis 2-Precise analysis: ";
+				int t;
+				cin>>t;
+				bool isFast=(t==1)?true:false;
 				//build array of all the holes int he new reference system
 				vector<Hole> holes;
 				for(size_t k=0; k<hierarchy.size(); k++){
@@ -107,7 +111,7 @@ int main( int argc, char** argv )
 						holes.push_back(temp);
 					}
 				}
-				vector<Rods> temp=detachRods(thresholdImage(rod.ROI),holes, rod.ROI,false);
+				vector<Rods> temp=detachRods(thresholdImage(rod.ROI),holes, rod.ROI,isFast);
 				for(size_t j=0; j<temp.size(); j++){
 					rods.push_back(temp[j]);
 				}

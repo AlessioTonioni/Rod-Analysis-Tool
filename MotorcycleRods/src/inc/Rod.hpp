@@ -24,8 +24,7 @@ public:
 	bool approximated;
 	int type(); //1 type A one holes, 2 type B two holes
 	float widthAtBaricenter(Mat*labeledImage, Point* rightCorner, Point* leftCorner);
-	float getAngle();
-	float getAngleFromMoments();
+	float getAngle(bool precise);
 	string getDescription();
 	void applyTranslation(int x, int y);
 	bool operator==(const Rods& r);
@@ -36,6 +35,8 @@ public:
 
 private:
 	void getExtreme(Point2f*topsx, Point2f*topdx);
+	float getAngleFromMoments();
+	float getangleFromRectangle();
 };
 
 

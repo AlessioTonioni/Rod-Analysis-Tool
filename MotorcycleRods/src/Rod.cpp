@@ -13,7 +13,7 @@ int Rods::type(){
 float Rods::widthAtBaricenter(Mat*labeledImage, Point* rightCorner, Point* leftCorner){
 
 	//compute baricenter width translating the shortest edge orientation along the baricenter
-	float angle=getAngle();
+	float angle=getangleFromRectangle();
 	if(angle<60 || angle>120 ){ //image rectangle is vertical
 		float angCoeff=-1/getMajorAxisAngularcoefficient();
 		*rightCorner=findFrontChange(*labeledImage,baricenter,angCoeff,baricenter.x+1,ROI.x+ROI.width,SCAN_X,1);
@@ -27,7 +27,15 @@ float Rods::widthAtBaricenter(Mat*labeledImage, Point* rightCorner, Point* leftC
 	return widthBaricenter;
 }
 
-float Rods::getAngle(){
+float Rods::getAngle(bool precise){
+	if(precise){
+		return getAngleFromMoments();
+	} else {
+		return getangleFromRectangle();
+	}
+}
+
+float Rods::getangleFromRectangle(){
 	if(enclosingRectangle.size.width < enclosingRectangle.size.height){
 		return enclosingRectangle.angle+180;
 	}else{
@@ -39,7 +47,7 @@ float Rods::getAngleFromMoments(){
 	if(contours.size()!=0){
 		Moments m=moments(contours,false);
 		float angle=(-(atan((2*m.mu11)/(m.mu02-m.mu20))*180/PI)/2);
-		return angle;
+		return (angle<0)?-1*angle+90:angle;
 	} else {
 		return -1;
 	}
@@ -49,7 +57,7 @@ string Rods::getDescription(){
 	stringstream ss;
 	ss<<"- Type: "<<((type()==1)?"A":"B")<<endl;
 	ss<<"- Baricenter: ("<<baricenter.x<<","<<baricenter.y<<")"<<endl;
-	ss<<"- Orientation: "<<getAngleFromMoments()<<endl;
+	ss<<"- Orientation: "<<getAngle(false)<<endl;
 	float width=(enclosingRectangle.size.height<enclosingRectangle.size.width)?enclosingRectangle.size.height:enclosingRectangle.size.width;
 	float length=(enclosingRectangle.size.height>enclosingRectangle.size.width)?enclosingRectangle.size.height:enclosingRectangle.size.width;
 	ss<<"- Width: "<<width<<endl;
